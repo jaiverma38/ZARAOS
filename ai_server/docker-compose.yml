@@ -1,0 +1,32 @@
+services:
+  zara-ai-server:
+    build:
+      context: ..
+      dockerfile: ai_server/Dockerfile
+    image: zara-ai-server:latest
+    ports:
+      - "8443:8443"
+    environment:
+      ZARA_JWT_SECRET: ${ZARA_JWT_SECRET:?set ZARA_JWT_SECRET}
+      ZARA_LLM_MODEL: ${ZARA_LLM_MODEL:-Qwen/Qwen2.5-0.5B-Instruct}
+      WHISPER_MODEL: ${WHISPER_MODEL:-base}
+      PIPER_MODEL_PATH: ${PIPER_MODEL_PATH:-/models/piper}
+      ZARA_DATA_DIR: /data
+      FACE_MODEL: ${FACE_MODEL:-buffalo_l}
+      VISION_MODEL: ${VISION_MODEL:-yolo11n.pt}
+      DATABASE_URL: sqlite:////data/zara.db
+      ZARA_LOCAL_TESTING: ${ZARA_LOCAL_TESTING:-false}
+    volumes:
+      - zara-ai-data:/data
+      - ./models:/models:ro
+    secrets:
+      - zara_tls_key
+      - zara_tls_cert
+    restart: unless-stopped
+secrets:
+  zara_tls_key:
+    file: ./certs/server.key
+  zara_tls_cert:
+    file: ./certs/server.crt
+volumes:
+  zara-ai-data:
