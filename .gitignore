@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# ESP-IDF / CMake
+build/
+sdkconfig
+managed_components/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
